@@ -24,7 +24,7 @@ public:
         table[index].push_back({key,value});
 
     }
-    void get(){
+    void getEntireTable(){
 
         for(int i = 0;i< 7;i++){
             cout<< "Index : " << i << " ";
@@ -57,7 +57,7 @@ int main(){
     // the same way this is happenning.
     // fixing it involes creating a Linked list for every index and storing it their
     h1.insert("atewhS", 20);
-    h1.get();
+    h1.getEntireTable();
     return 0;
 
 }
