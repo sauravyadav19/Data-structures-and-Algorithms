@@ -24,6 +24,34 @@ public:
         table[index].push_back({key,value});
 
     }
+    int get(const string &key){
+        // we take the key  => run it through the hash function => get the index
+        // this way, we avoid having to look through all the indices
+        // yes we still do have to traverse through the list that is stored at that index
+        // but if we have a good hashing function there would be minimal collisions (that is multple value stored at same index)
+        // and hence we have to look through less and less elements at that index as the list would be small
+        // here we are returning the value of that key or -1 if there is no key at all.
+        const int index = hashFunction(key);
+        for(pair<string,int> value : table[index]){
+            if(value.first == key){
+                return value.second;
+            }
+        }
+        return -1;
+    }
+    void remove(const string& key){
+        // find the index of the key by running it through the hashFunction
+        const int index = hashFunction(key);
+        // when we get the index we know that there is a list there
+        // table[index] is a list
+        // an list has a predicate function called remove_if 
+        // here we are passing a lambda function to it; at whatever instace fo the list
+        // the value return is true that instace of pair will be deleted.
+        // [&] help us the capture eveything outside by referece since we need the variable "key"
+        table[index].remove_if([&] (pair<string,int> &currentPair){
+            return currentPair.first == key;
+        });
+    }
     void getEntireTable(){
 
         for(int i = 0;i< 7;i++){
@@ -48,6 +76,8 @@ public:
 int main(){
      
     HashTable h1;
+
+    // ------INSERTING VALUES -------
     h1.insert("abc", 12);
     h1.insert("abcd", 11);
     h1.insert("Saurav", 10);
@@ -57,7 +87,17 @@ int main(){
     // the same way this is happenning.
     // fixing it involes creating a Linked list for every index and storing it their
     h1.insert("atewhS", 20);
+
+    // ------- LOOKING UP VALUES ------
+    cout<< "Saurav : " << h1.get("Saurav")<<endl;
+    cout << "kim : "<< h1.get("kim") <<endl;
+    
+    //---ENTIRE HASH TABLE -----
     h1.getEntireTable();
+
+    h1.remove("abcd");
+    h1.getEntireTable();
+
     return 0;
 
 }
