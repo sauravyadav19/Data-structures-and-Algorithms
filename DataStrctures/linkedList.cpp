@@ -50,6 +50,23 @@ public:
         }
     }
 
+    bool searching(int key){
+        bool found = false;
+        if(head == nullptr){
+            cout<< "List is empty"<<endl;
+            return found;
+        }
+        Node *traverseNode = head;
+        while(traverseNode !=nullptr){
+            if(traverseNode->data == key){
+                found = true;
+                return found;
+            }
+            traverseNode = traverseNode ->nextPointer;
+        }
+        return found;
+    }
+
     void display(){
         if(head == nullptr){
             cout<< "List is Empty"<<endl;
@@ -71,5 +88,8 @@ int main(){
     l.insertAtBeg(20);
     l.insertAtEnd(30);
     l.display();
+
+    cout<< "Searching for 20: " << (l.searching(20) ? "Found" : "Not Found")<<endl ;
+    cout<< "Searching for 40: " << (l.searching(40) ? "Found" : "Not Found")<<endl ;
     return 0;
 }
