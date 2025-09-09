@@ -66,6 +66,36 @@ public:
         }
         return found;
     }
+    void deleteElement(int key){
+        Node* current = nullptr;
+        Node* previous = nullptr;
+
+        if(head == nullptr){
+            cout<< "The List is empty";
+            return;
+        }
+        // Seperate case to delete from head
+        if(head->data == key){
+            Node* temp = head;
+            head = head->nextPointer;
+            cout<<"Deleted the Element";
+            delete temp;
+            return;
+        }
+        current = head->nextPointer;
+        previous = head;
+        //General Case  (that also includes the edge case of deleting the last node in the list)
+        while(current != nullptr){
+            if(current->data == key){
+                previous->nextPointer = current->nextPointer;
+                cout<< "Deleted the Element"<<endl;
+                delete current;
+                return;
+            }
+            previous = current;
+            current = current -> nextPointer;
+        }
+    }
 
     void display(){
         if(head == nullptr){
@@ -87,9 +117,13 @@ int main(){
     l.insertAtEnd(10);
     l.insertAtBeg(20);
     l.insertAtEnd(30);
+    l.insertAtEnd(40);
+    l.insertAtBeg(50);
     l.display();
 
-    cout<< "Searching for 20: " << (l.searching(20) ? "Found" : "Not Found")<<endl ;
-    cout<< "Searching for 40: " << (l.searching(40) ? "Found" : "Not Found")<<endl ;
+    // cout<< "Searching for 20: " << (l.searching(20) ? "Found" : "Not Found")<<endl ;
+    // cout<< "Searching for 40: " << (l.searching(40) ? "Found" : "Not Found")<<endl ;
+    l.deleteElement(20);
+    l.display();
     return 0;
 }
