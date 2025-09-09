@@ -5,7 +5,9 @@ using namespace std;
 
 class HashTable{
 private:
-    const int BUCKET_SIZE = 7;
+    // we have added static here because we do not want every instace of HashTable class to have 
+    // it own copy of BUCkET_SIZE; this is a memory optimisation
+    const static int BUCKET_SIZE = 7;
     //Multiple values could be hased to same index; hence we are incoporating list to accmodate them all.
     vector<list<pair<string,int>>> table;
     int hashFunction(const string &key){
@@ -82,10 +84,12 @@ int main(){
     h1.insert("abcd", 11);
     h1.insert("Saurav", 10);
     h1.insert("Shweta", 12);
+    //------COMMENT BEFORE CHAINING WAS INCORPORATED:------
     // The way our hash function is design, if two values gets same hashed index; the later
     // hashed key-value pair will overwrite the former 
     // the same way this is happenning.
     // fixing it involes creating a Linked list for every index and storing it their
+    // ------------------------------------------------------------------------------
     h1.insert("atewhS", 20);
 
     // ------- LOOKING UP VALUES ------
