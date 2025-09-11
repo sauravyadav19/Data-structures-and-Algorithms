@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<unordered_map>
 using namespace std;
 
 class MinMaxStack{
@@ -7,20 +8,36 @@ class MinMaxStack{
         vector<int> stack = {};
     public:
         int peek(){
-            return 0;
-
+            return stack[stack.size() - 1];
         }
         int pop(){
-            return 0;
+            int result =  stack[stack.size() - 1];
+            stack.pop_back();
+            return result;
             
         }
-        int push(){
-
-            return 0;
+        void push(int value){
+             stack.push_back(value);
+        }
+        void display(){
+            for(auto &element: stack){
+                cout<< element << " ";
+            }
+            cout<<endl;
         }
 
 };
 
 int main(){
+    MinMaxStack obj = MinMaxStack();
+    obj.push(10);
+    obj.push(20);
+    obj.push(30);
+    obj.display();
+    obj.pop();
+    obj.display();
+    obj.push(50);
+    obj.display();
+    cout<< "peek: " << obj.peek() <<endl;
     return 0;
 }
