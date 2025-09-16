@@ -8,8 +8,7 @@ using namespace std;
 // create a Tree class
     // root 
     // implement functionality to add children for a node
-    // traversal
-
+    
 int main(){
     return 0;
 }
