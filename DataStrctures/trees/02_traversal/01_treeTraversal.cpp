@@ -13,6 +13,11 @@ class tree {
     public:
         tree(): root(nullptr){}
         tree(Node* root):root(root){}
+
+        //Method Declaration
+        vector<int>& dfs(Node* node, vector<int>& result);
+        vector<int>& dfs(vector<int>& result);
+
         void addChild(Node* parentNode, Node* childNode){
             parentNode->children.push_back(childNode);
         }
@@ -22,6 +27,31 @@ class tree {
             }
         }
 };
+
+// When we want to expliclity traverse a node (usefull if we want to travserse a sub-tree)
+vector<int>& tree::dfs(Node* node, vector<int>& result){
+
+    // push the Data part of the Node into the Result Array
+    result.push_back(node->data);
+    // (Base Case) If the There is no children that is the Node is a leaf Node we return;
+    if(node->children.empty()){
+        return result;
+    }else{
+        //else we recursievely visit every node
+        for(Node* i: node->children){
+             dfs(i,result);
+        }
+    }
+    // return the result (by reference)
+    return result;
+
+}
+// When we want to traverse the entire tree, hence starting node is ROOT
+vector<int>& tree::dfs(vector<int>& result){
+    return dfs(this->root,result);
+}
+
+
 
 int main(){
 
@@ -75,6 +105,15 @@ int main(){
     t->addChildren(level3Child_3,{level4Child_1,level4Child_2});
     t->addChild(level4Child_1,level5Child_1);
     t->addChildren(level5Child_1,{level6Child_1,level6Child_2,level6Child_3});
+
+
+    vector<int> result = {};
+    t->dfs(result);
+
+    for(int&i : result){
+        cout<< i << " ";
+    }
+    cout<<endl;
 
     return 0;
 }
