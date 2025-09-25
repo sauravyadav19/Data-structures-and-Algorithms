@@ -50,7 +50,16 @@ vector<int>& tree::dfs(Node* node, vector<int>& result){
 vector<int>& tree::dfs(vector<int>& result){
     return dfs(this->root,result);
 }
-
+ostream& operator<< (ostream& stream, tree *t ){
+    vector<int> depthFirstTraversal;
+    t->dfs(depthFirstTraversal);
+    stream<< "[ ";
+    for(int& element: depthFirstTraversal){
+        stream<< element << " ";
+    }
+    stream << "]"<<endl;
+    return stream;
+}
 
 
 int main(){
@@ -107,13 +116,7 @@ int main(){
     t->addChildren(level5Child_1,{level6Child_1,level6Child_2,level6Child_3});
 
 
-    vector<int> result = {};
-    t->dfs(result);
-
-    for(int&i : result){
-        cout<< i << " ";
-    }
-    cout<<endl;
+    cout<<t;
 
     return 0;
 }
