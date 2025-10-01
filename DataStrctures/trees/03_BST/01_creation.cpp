@@ -68,11 +68,41 @@ class BST{
        void insertNode(int value){
            root =  insertNodeHelper(root,value);
        }
+
+       void printTreeHelper(Node* root, int space = 0, int indent = 5) {
+           
+            if (root == nullptr){
+                return;
+            }
+
+            // Increase distance between levels
+            space += indent;
+
+            // Print right child first
+            printTreeHelper(root->right, space);
+
+            // Print current node after spaces
+            cout << endl;
+            for (int i = indent; i < space; i++){
+                cout << " ";
+            }
+            cout << root->value << "\n";
+
+            // Print left child
+            printTreeHelper(root->left, space);
+        }
+
+        void printTree(){
+            printTreeHelper(root);
+        }
+
+       
        
 };
 
 int main(){
 
     BST *tree = new BST({10,5,17,13,1,18,6});
+    tree->printTree();
     return 0;
 }
