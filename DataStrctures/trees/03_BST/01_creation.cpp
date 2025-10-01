@@ -96,13 +96,33 @@ class BST{
             printTreeHelper(root);
         }
 
+        bool containsHelper(Node* node, int target){
+            if(node == nullptr){
+                return false;
+            }
+            if(node->value == target){
+                return true;
+            }
+            if(target > node->value){
+                return containsHelper(node->right,target);
+            }
+            else{
+              return containsHelper(node->left,target);
+            }
+        }
+        bool contains(int target){
+            return containsHelper(root,target);
+        }
+
        
        
 };
 
 int main(){
 
-    BST *tree = new BST({10,5,17,13,1,18,6});
-    tree->printTree();
+    BST *tree = new BST({10,5,17,13,1,18});
+    cout<<boolalpha;
+    cout<< tree->contains(1)<<endl;
+    // tree->printTree();
     return 0;
 }
