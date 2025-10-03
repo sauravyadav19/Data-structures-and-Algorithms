@@ -114,15 +114,79 @@ class BST{
             return containsHelper(root,target);
         }
 
-       
-       
+       Node* leftMostValue(Node* node){
+
+        if(node->left ==  nullptr){
+            return node;
+        }
+        return leftMostValue(node->left);
+
+       }
+       Node* leftMostValueHelper(){
+            return leftMostValue(root);
+       }
+
+       Node* searchNode(Node* node, int target){
+            if(node == nullptr){
+                return nullptr;
+            }
+            if(node->value == target){
+                return node;
+            }
+            if(target > node->value){
+                return searchNode(node->right,target);
+
+            }else{
+                return searchNode(node->left, target);
+            }
+       }
+
+       Node* searchNodeHelper(int target){
+        return searchNode(root,target);
+       }
+
+       void deleteElementHelper(Node* node, int target){
+            if(node == nullptr){
+                return;
+            }
+            Node* toBeDeleted = searchNode(root,target);
+            Node* toBeReplacedWith = leftMostValue(toBeDeleted->right);
+            toBeDeleted->value = toBeReplacedWith->value;
+            Node* toBeReplacedWithParent = toBeDeleted;    
+            while(toBeReplacedWithParent != nullptr){
+                if(toBeReplacedWithParent-> right == toBeReplacedWith){
+                    toBeReplacedWithParent->right = nullptr;
+                    break;
+                }
+                if(toBeReplacedWithParent ->left == toBeReplacedWith){
+                    toBeReplacedWithParent->left = nullptr;
+                    break;
+                }
+                if(toBeReplacedWithParent->value > toBeReplacedWith->value){
+                    toBeReplacedWithParent = toBeReplacedWithParent->left;
+                }else{
+                    toBeReplacedWithParent = toBeReplacedWithParent->right;
+
+                }
+            }
+       }
+
+       void deleteElement(int target){
+        deleteElementHelper(root,target);
+       }
 };
 
 int main(){
 
-    BST *tree = new BST({10,5,17,13,1,18});
-    cout<<boolalpha;
-    cout<< tree->contains(1)<<endl;
-    // tree->printTree();
+    BST *tree = new BST({10,5,17,1,18,6,15});
+    // cout<<boolalpha;
+    // cout<< tree->contains(1)<<endl;
+    tree->printTree();
+
+    cout<<endl;
+    cout<<endl;
+    cout<< "-------------------------------------------------------"<<endl;
+    tree->deleteElement(18);
+    tree->printTree();
     return 0;
 }
