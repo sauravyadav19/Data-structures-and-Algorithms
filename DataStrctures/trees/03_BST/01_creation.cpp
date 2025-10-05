@@ -122,10 +122,6 @@ class BST{
         return leftMostValue(node->left);
 
        }
-       Node* leftMostValueHelper(){
-            return leftMostValue(root);
-       }
-
        Node* searchNode(Node* node, int target){
             if(node == nullptr){
                 return nullptr;
@@ -140,35 +136,72 @@ class BST{
                 return searchNode(node->left, target);
             }
        }
-
-       Node* searchNodeHelper(int target){
-        return searchNode(root,target);
-       }
-
-       void deleteElementHelper(Node* node, int target){
+       Node* deleteElementHelper(Node* node, int target){
+            // In case target that does not exist in the tree
             if(node == nullptr){
-                return;
+                return nullptr;
             }
-            Node* toBeDeleted = searchNode(root,target);
-            Node* toBeReplacedWith = leftMostValue(toBeDeleted->right);
-            toBeDeleted->value = toBeReplacedWith->value;
-            Node* toBeReplacedWithParent = toBeDeleted;    
-            while(toBeReplacedWithParent != nullptr){
-                if(toBeReplacedWithParent-> right == toBeReplacedWith){
-                    toBeReplacedWithParent->right = nullptr;
-                    break;
+            // Traversal to the correct position
+                // if (root > target) (Case 1)
+                    //Move to the left side of the tree
+                // else if (root < target) (Case 2)
+                    // Move to right side of the tree
+                // and we know that if its not either big or smaller than the node the its equal (Case 3)
+                    // thus we can start with deletion
+            if(node->value > target){
+                //Case 1
+               node->left = deleteElementHelper(node->left,target);
+            }
+            else if(node->value < target){
+                //Case 2
+              node->right =  deleteElementHelper(node->right,target);
+            }
+            else{
+                // Case 3
+                    // Here we can have Four sub-cases 
+                        // Case 3.1 
+                            // Wherein if the node we are trying to delete has both left and right child
+                            // in that case we replace the node with the smallest value in its right subtree
+                            // and then we proceed to delete node we just copied from 
+                if(node->left != nullptr && node->right != nullptr){
+                    node->value = leftMostValue(node->right)->value;
+                    node->right = deleteElementHelper(node->right,node->value);
+                    return node;
                 }
-                if(toBeReplacedWithParent ->left == toBeReplacedWith){
-                    toBeReplacedWithParent->left = nullptr;
-                    break;
+                        // Case 3.2 
+                        // in Case the node we are trying to delete has only left child
+                        // in a temporary variable store the where its left child is pointing
+                        // and then proceed to delete that node using `delete`
+                        // and then return the temp variable, thus keeping the rest of subtree;
+                else if (node->left !=nullptr && node->right == nullptr){
+                    Node * temp = node->left;
+                    delete node;
+                    return temp;
+
                 }
-                if(toBeReplacedWithParent->value > toBeReplacedWith->value){
-                    toBeReplacedWithParent = toBeReplacedWithParent->left;
-                }else{
-                    toBeReplacedWithParent = toBeReplacedWithParent->right;
+                // Case 3.3
+                        // in Case the node we are trying to delete has only right child
+                        // in a temporary variable store the where its right child is pointing
+                        // and then proceed to delete that node using `delete`
+                        // and then return the temp variable, thus keeping the rest of subtree;
+                else if( node->left == nullptr && node->right != nullptr){
+                    Node* temp = node->right;
+                    delete node;
+                    return temp;
+
+                }
+                // Case 3.4 
+                    // when the node does not have either child
+                    // we simply delete that node and return nullptr;
+                else{
+                    delete node;
+                    return nullptr;
 
                 }
             }
+            return node;
+            //  here we have chosen to return node so that in case there is there 
+            // is change in the subtree the overall tree could update properly.
        }
 
        void deleteElement(int target){
@@ -178,7 +211,7 @@ class BST{
 
 int main(){
 
-    BST *tree = new BST({10,5,17,1,18,6,15});
+    BST *tree = new BST({10,5,17,18,6,15});
     // cout<<boolalpha;
     // cout<< tree->contains(1)<<endl;
     tree->printTree();
@@ -186,7 +219,7 @@ int main(){
     cout<<endl;
     cout<<endl;
     cout<< "-------------------------------------------------------"<<endl;
-    tree->deleteElement(18);
+    tree->deleteElement(5);
     tree->printTree();
     return 0;
 }
