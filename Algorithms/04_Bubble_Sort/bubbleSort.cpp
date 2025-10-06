@@ -11,11 +11,18 @@ void swap(int& num1, int& num2){
 }
 
 void bubbleSort(vector<int>&array){
+    bool swappedPerformed = false;
     for (int i = 0; i < array.size() - 1; i++){
         for (int j = 0; j < array.size()- i - 1; j++){
             if(array [j] > array[j+1]){
                 swap (array[j], array[j+1]);
+                swappedPerformed = true;
             } 
+        }
+        // In case there haven't been even a single swap
+        // meaning the array is sorted
+        if(!swappedPerformed){
+            break;
         }
     }
 }
@@ -37,7 +44,7 @@ ostream& operator<< (ostream& stream, vector<int>& array){
 
 int main(){
 
-    vector<int> array = {9,10,8,4,2,1,11,15,4};
+    vector<int> array = {1,2,3,4,5,6,11,15};
     cout<< "Before Sorting : " << array;
     bubbleSort(array);
     cout<< "After Sorting :  "<< array;
