@@ -14,6 +14,7 @@ void bubbleSort(vector<int>&array){
     bool swappedPerformed = false;
     for (int i = 0; i < array.size() - 1; i++){
         for (int j = 0; j < array.size()- i - 1; j++){
+            swappedPerformed = false; // resest the flag for each pass
             if(array [j] > array[j+1]){
                 swap (array[j], array[j+1]);
                 swappedPerformed = true;
