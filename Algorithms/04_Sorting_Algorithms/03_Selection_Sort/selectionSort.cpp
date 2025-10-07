@@ -31,16 +31,27 @@ unsigned int minIndex(vector<int>& array,int startIndex){
     
 }
 
+void swap(int& num1, int& num2){
+    int temp = num1;
+    num1 = num2;
+    num2 = temp;
+}
+
 void selectionSort(vector<int>& array){
+
+    for(int i = 0; i < array.size(); i++){
+        int index = minIndex(array,i);
+        swap(array[i], array[index]);
+    }
     return;
 }
 
 int main(){
 
     vector<int> array = {9,1,8,2,-2,0,19,2,7};
-    cout<< array;
+    cout<< "Before Sorting: "<<  array;
     selectionSort(array);
-    cout<< array;
+    cout<<"After Sorting : " << array;
     return 0;
 
 }
