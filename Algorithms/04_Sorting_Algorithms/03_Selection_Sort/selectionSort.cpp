@@ -3,17 +3,17 @@
 using namespace std;
 
 ostream& operator<<(ostream& stream, const vector<int>&array){
-    cout<< "[ ";
+    stream<< "[ ";
     for(int i = 0; i < array.size(); i++){
         if(i == array.size() - 1){
-            cout<< array[i];
+            stream<< array[i];
         }
         else{
-            cout<< array[i] << ", ";
+            stream<< array[i] << ", ";
         }
     }
-    cout<< " ]";
-    cout<<endl;
+    stream<< " ]";
+    stream<<endl;
     return stream;
 }
 
