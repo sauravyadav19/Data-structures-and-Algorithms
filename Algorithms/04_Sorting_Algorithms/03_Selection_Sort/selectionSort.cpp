@@ -17,6 +17,20 @@ ostream& operator<<(ostream& stream, const vector<int>&array){
     return stream;
 }
 
+// Helper function to reterive the Index of the smallest number in the array
+// starting from the index specifed as the argument
+unsigned int minIndex(vector<int>& array,int startIndex){
+    int indexWithMinValue = startIndex;
+    for(int i = startIndex; i < array.size();i++){
+        if(array[i] < array[indexWithMinValue]){
+            indexWithMinValue = i;
+        }
+    }
+
+    return indexWithMinValue;
+    
+}
+
 void selectionSort(vector<int>& array){
     return;
 }
@@ -28,5 +42,5 @@ int main(){
     selectionSort(array);
     cout<< array;
     return 0;
-    
+
 }
