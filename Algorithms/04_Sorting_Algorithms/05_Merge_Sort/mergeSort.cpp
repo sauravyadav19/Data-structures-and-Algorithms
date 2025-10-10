@@ -18,7 +18,7 @@ ostream& operator<< (ostream& stream, const vector<int>& array){
     return stream;
 }
 
-vector<int> merge(vector<int>& firstArray, vector<int>& secondArray){
+vector<int> merge(vector<int> firstArray, vector<int> secondArray){
     vector<int> result = {};
     if(firstArray.size () != 0 and secondArray.size() != 0){
        
@@ -75,9 +75,42 @@ vector<int> merge(vector<int>& firstArray, vector<int>& secondArray){
 
 }
 
+vector<int> mergeSort(vector<int> array){
+    // Base Case: in case their is only one element in the array we simply return that element
+    if(array.size() == 1){
+        return array;
+    }
+
+    // divide the array
+    int mid = array.size()/2 ;
+
+    // Left half
+    vector<int> left;
+
+    for(int i = 0; i < mid; i++){
+        left.push_back(array[i]);
+    }
+
+
+    // right half
+    vector <int> right;
+
+    for(int i  = mid; i < array.size(); i ++){
+        right.push_back(array[i]);
+    }
+
+    // Recursiverly dividing
+    left = mergeSort(left);
+    right = mergeSort(right);
+
+    // merging the array
+    return merge(left,right);
+
+}
+
 int main(){
-    vector<int> array = {8,9,10,15,19};
-    vector<int> array2 = {1,7,10,11,12,20,21};
-   cout<< merge(array,array2);
+    vector<int> array = {8,9,10,15,19,10,-1,0,9,7,14};
+    cout<< "Before Sorting: " << array;
+    cout<< "After Sorthing: " << mergeSort(array);
     return 0;
 }
