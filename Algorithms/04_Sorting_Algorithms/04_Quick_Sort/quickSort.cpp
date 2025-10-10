@@ -40,16 +40,19 @@ int partitioner(vector<int>& array,int low, int high){
 
 }
 
-void quickSort(vector<int>& array, int low,int high){
+void quickSortHelper(vector<int>& array, int low,int high){
     // As long as the value of the lower index is smaller than that of higher one
     if(low < high){
         // this is the index where we would partition the array
         int mid = partitioner(array,low,high);
         // Individually sorting each half
-        quickSort(array,low,mid);
-        quickSort(array,mid + 1,high);
+        quickSortHelper(array,low,mid);
+        quickSortHelper(array,mid + 1,high);
     }
+}
 
+void quickSort(vector<int>& array){
+    quickSortHelper(array,0,array.size()- 1);
 }
 ostream& operator<<(ostream& stream, const vector<int>& array){
     stream<< "[ ";
@@ -69,7 +72,7 @@ int main(){
 
     vector<int> array = {8,3,7,6,2,5,4,-1,2};
     cout<< array;
-    quickSort(array,0,array.size()-1);
+    quickSort(array);
     cout<<array;
 
     return 0;
