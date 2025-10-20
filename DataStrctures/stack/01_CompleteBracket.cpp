@@ -15,64 +15,56 @@ ostream& operator<<(ostream& stream, stack<char> string ){
     return stream;
 }
 
-void completenessEvaluator(string expression){
+bool completenessEvaluator(string expression){
     stack<char> bracketStack;
     
     for(auto el: expression){
         if(el == '{' || el == '[' || el == '('){
             bracketStack.push(el);
-            cout<< bracketStack <<endl;
         }else{
             if(el == '}'){
                 if(bracketStack.top() == '{'){
                     bracketStack.pop();
-                    cout<< bracketStack<<endl;
                 }else{
-                    cout<< "Bracket Overlap condition"<<endl;
-                    return;
+                    return false;
                 }
 
             }
             else if (el == ']'){
                 if(bracketStack.top() == '['){
                     bracketStack.pop();
-                    cout<< bracketStack<<endl;
                 }
                 else{
-                    cout<<"Bracket Overlap"<<endl;
-                    return;
+                    return false;
                 }
 
             }
             else if (el == ')'){
                 if(bracketStack.top() == '('){
                     bracketStack.pop();
-                    cout<< bracketStack<<endl;
                 }else{
-                    cout<< "Bracket Overlap"<<endl;
-                    return;
+                    return false;
                 }
 
             }
             else{
-                cout<< "some rouge condition "<< endl;
-                return;
+                cout<< "rouge condition "<< endl;
+                return false;
             }
         }
     }
     if(bracketStack.empty()){
-        cout<< "Complete Bracket Expression"<<endl;
+        return true;
     }
     else{
-        cout<< "Incomplete" <<endl;
-        cout<< bracketStack;
+        return false;
     }
 
 }
  
 int main(){
 
-    string expression = "[{()}]";
-    completenessEvaluator(expression);
+    string expression = "";
+    cout<< completenessEvaluator(expression);
     return 0;
 }
