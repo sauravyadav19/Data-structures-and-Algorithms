@@ -69,9 +69,8 @@ ostream& operator<<(ostream& stream, stack<int> string ){
                     array in the reverse order that is from n to zero instead of what we did for EAST (zeroth to n));
 */
 
-vector<int> sunsetView(vector<int>& buildingsHeight, string direction){
+vector<int> sunsetViewHelper(vector<int>& buildingsHeight){
     stack<int> buildingsWithView;
-
     // Traversing the array
     for(int i = 0; i < buildingsHeight.size(); i++){
         // In case the stack is empty, we simply push the building's index to stack
@@ -113,10 +112,54 @@ vector<int> sunsetView(vector<int>& buildingsHeight, string direction){
 
 }
 
+vector<int> sunsetView(vector<int> buildingsHeight,string direction){
+
+    if(direction == "EAST"){
+        // The view look like this 
+        /*
+            BUILDING_0 BUILDING_1 BUILDING_2 .... BUILDING_n     SUN
+        */
+        return sunsetViewHelper(buildingsHeight);
+    }
+    else{
+        // In case the direction in which buildings are facing WEST
+        //    sun   [buildings_ 0, building_1, building_2..building_n];
+        // but our code is meant to run from left to right
+        // we reverse it 
+
+        // BUILDING_N BUILDING_n-1 building_n-2 ... building_0   sun
+        // thus keeping the logic
+        // but we need to map the the result propelry so that indices we get are that of 
+        // original array
+
+        //Reversing
+
+        vector<int> buildingsHeightReverse;
+        for(int i = buildingsHeight.size() - 1 ; i >=0 ; i--){
+            buildingsHeightReverse.push_back(buildingsHeight[i]);
+        }
+        // Mapping to original indices
+        vector<int> result =  sunsetViewHelper(buildingsHeightReverse);
+        for(int& el: result){
+
+            el = (buildingsHeight.size() - 1) - el;
+
+        }
+
+        // sortin the array
+        vector<int> mappedResult;
+        for(int i = result.size() - 1; i >= 0; i--){
+            mappedResult.push_back(result[i]);
+        }
+        return mappedResult;
+    }
+
+}
+
 int main(){
 
     vector<int> buildingsHeight = {3,5,4,4,3,1,3,2};
-    vector<int> result = sunsetView(buildingsHeight,"EAST");
+    vector<int> result = sunsetView(buildingsHeight,"WEST");
     for(auto el: result){
         cout<< el << " ";
     }
