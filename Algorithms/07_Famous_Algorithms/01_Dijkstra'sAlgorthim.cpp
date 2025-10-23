@@ -1,6 +1,6 @@
 /*
    - Objective: To find the shorest distance from a source node to all other nodes in the graph
-   - Algorithm in use : We are using Dijsktra's Algorithm 
+   - Algorithm in use : We are using Dijkstra's Algorithm 
    - How does it works? 
         => We start of with assuming that every node is very far away with an unknown distance (infinity)
             and as we start the traversal of our graph from the source node to all other nodes, we continue to update these distance 
@@ -16,7 +16,7 @@
          there could not be a better path to reach that, but negative number totally off throws this logic for negative weights we have
          a different algorithm called bellman fort algorithm.
 
--  Rough algorithm will look something like this:
+    -  Rough algorithm will look something like this:
         1. Initialize all nodes with an infinite distance, except the source.
         2. Pick the unvisited node with the smallest known distance.
         3. Relax all its outgoing edges — if a shorter path to a neighbor is found, update it.
@@ -27,27 +27,81 @@
 
 #include <iostream>
 #include <vector>
+#include <climits>
 using namespace std;
 
+
+// STEP 2
+// Returns the Index of the node with the minimum distance and that has not been visited yet
+// In case all the nodes are visited it return -1
+int getUnvisitedMinDistance(vector<int>& isVisited, vector<int>& distance){
+
+    int i = 0;
+
+    // find the first node/index that is not visited yet 
+    while(i < isVisited.size() && isVisited[i]){
+        i++;
+    }
+    // If all nodes has been visited we simply return -1 as the index
+    if(i >= isVisited.size()){
+        return -1;
+    }
+    // but if there are nodes that is yet not been visited, we simply initialize min with the first
+    // unvisited node's index
+    int minIndex = i;
+
+    // Now compare each unvisited node/index against the 'min's distance'
+    // if there is a index that is not yet visited and has a smaller distance than 'min'
+    // we return that index
+    for(int j = 0; j < isVisited.size(); j++){
+        if(isVisited[j] == false  && distance[minIndex] > distance[j]){
+            minIndex = j;
+        }
+    }
+
+    return minIndex;
+}
+
 int main(){
-    vector<vector<vector<int>>> graph = {
-        // 0
-        {{1,7}}, // this means that there is an edge from 0 to 1 with a weight of 7
+    // Initializing our Graph
+        vector<vector<vector<int>>> graph = {
+            // 0
+            {{1,7}}, // this means that there is an edge from 0 to 1 with a weight of 7
 
-        //1
-        {{2,6}, {3,20}, {4,3}}, // this means there is a edge from 1 to 2,3 and 4 with respective weight of 6,20 and 3
+            //1
+            {{2,6}, {3,20}, {4,3}}, // this means there is a edge from 1 to 2,3 and 4 with respective weight of 6,20 and 3
 
-        //2
-        {{3,14}},
+            //2
+            {{3,14}},
 
-        //3
-        {{4,2}},
+            //3
+            {{4,2}},
 
-        //4
-        {},  // this means that there is not outgoing edge from 4
+            //4
+            {},  // this means that there is not outgoing edge from 4
 
-        //5
-        {}
-    };
+            //5
+            {}};
+    
+    // Helper Data strctures:
+    
+        int noOfNodes = graph.size();
+
+        //Step 1: Initalizing all the distances to be Infinity
+        // Creates an array with noOfNodes as its size and all the values intialized with INT_MAX
+        vector<int> distances(noOfNodes, INT_MAX); 
+
+        // Creating an array to track all the nodes we have visited.
+        // here the indices will specifiy if the node has been visited or not.
+        // Example if at zeroth index its false it means that 0 node has not been yet visited
+        // we starting of with all the nodes as not visited, hence all the index will have false as the value
+        vector<bool> isVisited(noOfNodes, false)
+
+        // Initializing the The source Node
+        int sourceNode = 0;
+
+        // Changing the distance of the source Node to source Node to be zero in the Distance array
+        distance[sourceNode] = 0;
+
     return 0;
 }
