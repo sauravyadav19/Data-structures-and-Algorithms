@@ -62,7 +62,7 @@ int getUnvisitedMinDistance(vector<bool>& isVisited, vector<int>& distance){
     return minIndex;
 }
 
-vector<int> dijkstrasAlgorithm(vector<vector<vector<int>>>& graph){
+vector<int> dijkstrasAlgorithm(vector<vector<vector<int>>>& graph, int sourceNode = 0){
 
         // Helper Data strctures:
         int noOfNodes = graph.size();
@@ -77,12 +77,10 @@ vector<int> dijkstrasAlgorithm(vector<vector<vector<int>>>& graph){
         // we starting of with all the nodes as not visited, hence all the index will have false as the value
         vector<bool> isVisited(noOfNodes,false);
 
-        // Initializing the The source Node
-        int sourceNode = 0;
-
         // Changing the distance of the source Node to source Node to be zero in the Distance array
         distances[sourceNode] = 0;
 
+        // Step 3:
         // starting with traversing and relaxation
         int visitingNode = getUnvisitedMinDistance(isVisited,distances);
         // We will exit the loop if once all the nodes have been visited 
@@ -153,12 +151,12 @@ int main(){
             //5
             {}};
     
-    // Printing the smallest distance from source node to all other nodes in the Graph
-    // -1 means that there is no path to reach that node and hence it is disconnected
-
-    for(int& el: dijkstrasAlgorithm(graph)){
+    // Printing the minimu distance from source node to all other nodes in the Graph
+    // if a distance for a node is  -1 means that there is no path to reach that node from the source node
+    for(int& el: dijkstrasAlgorithm(graph,0)){
         cout<< el << " ";
     }
+    cout<< endl;
 
     return 0;
 }
