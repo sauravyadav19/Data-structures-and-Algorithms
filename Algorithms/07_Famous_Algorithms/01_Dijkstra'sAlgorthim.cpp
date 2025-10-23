@@ -34,7 +34,7 @@ using namespace std;
 // STEP 2
 // Returns the Index of the node with the minimum distance and that has not been visited yet
 // In case all the nodes are visited it return -1
-int getUnvisitedMinDistance(vector<int>& isVisited, vector<int>& distance){
+int getUnvisitedMinDistance(vector<bool>& isVisited, vector<int>& distance){
 
     int i = 0;
 
@@ -62,6 +62,76 @@ int getUnvisitedMinDistance(vector<int>& isVisited, vector<int>& distance){
     return minIndex;
 }
 
+vector<int> dijkstrasAlgorithm(vector<vector<vector<int>>>& graph){
+
+        // Helper Data strctures:
+        int noOfNodes = graph.size();
+
+        //Step 1: Initalizing all the distances to be Infinity
+        // Creates an array with noOfNodes as its size and all the values intialized with INT_MAX
+        vector<int> distances(noOfNodes,INT_MAX);
+
+        // Creating an array to track all the nodes we have visited.
+        // here the indices will specifiy if the node has been visited or not.
+        // Example if at zeroth index its false it means that 0 node has not been yet visited
+        // we starting of with all the nodes as not visited, hence all the index will have false as the value
+        vector<bool> isVisited(noOfNodes,false);
+
+        // Initializing the The source Node
+        int sourceNode = 0;
+
+        // Changing the distance of the source Node to source Node to be zero in the Distance array
+        distances[sourceNode] = 0;
+
+        // starting with traversing and relaxation
+        int visitingNode = getUnvisitedMinDistance(isVisited,distances);
+        // We will exit the loop if once all the nodes have been visited 
+        // that happens when getUnvisitedMinDistance () return -1;
+        while(visitingNode != -1){
+            isVisited[visitingNode] = true;
+            // Iterating through all the neighbours of a node
+            for(int i = 0; i < graph[visitingNode].size(); i++){
+                vector<int> neighbor = graph[visitingNode][i];
+                int node = neighbor[0];
+                int weight = neighbor[1];
+                // We need to make sure that the current node(visiting node) does not has the weight of INT_MAX
+                // because that would result in unexpected values
+                if(distances[visitingNode] != INT_MAX && distances[visitingNode] + weight < distances[node]){
+                    // Performing Relaxation
+                    distances[node] = distances[visitingNode] + weight;
+                }
+            }
+
+            // Displaying the Distance array iteration of a node visit
+            cout<< visitingNode << " | ";
+            for(auto& el : distances){
+                if(el == INT_MAX){
+                    cout<< "\tINT_MAX";
+                }else{
+                    cout<<"\t"<<el << " ";
+                }
+            }
+            cout<<endl;
+
+            visitingNode = getUnvisitedMinDistance(isVisited,distances);
+        }
+
+        // Before returning the distances array we need to make sure that some nodes might have INT_MAX as their
+        // values i.e these  nodes are not connected to the graph and have no neighbour, we are sending -1 instead
+        // of sending a large number such as INT_MAX for readablitiy and for working purposes
+        for(int i = 0; i < distances.size(); i++){
+            if(distances[i] == INT_MAX){
+
+                distances[i] = -1;
+                
+            }
+        }
+
+        //  Returning the distances array which contains the smallest distance from source node to all other nodes
+        return distances;
+
+}
+
 int main(){
     // Initializing our Graph
         vector<vector<vector<int>>> graph = {
@@ -83,25 +153,12 @@ int main(){
             //5
             {}};
     
-    // Helper Data strctures:
-    
-        int noOfNodes = graph.size();
+    // Printing the smallest distance from source node to all other nodes in the Graph
+    // -1 means that there is no path to reach that node and hence it is disconnected
 
-        //Step 1: Initalizing all the distances to be Infinity
-        // Creates an array with noOfNodes as its size and all the values intialized with INT_MAX
-        vector<int> distances(noOfNodes, INT_MAX); 
-
-        // Creating an array to track all the nodes we have visited.
-        // here the indices will specifiy if the node has been visited or not.
-        // Example if at zeroth index its false it means that 0 node has not been yet visited
-        // we starting of with all the nodes as not visited, hence all the index will have false as the value
-        vector<bool> isVisited(noOfNodes, false)
-
-        // Initializing the The source Node
-        int sourceNode = 0;
-
-        // Changing the distance of the source Node to source Node to be zero in the Distance array
-        distance[sourceNode] = 0;
+    for(int& el: dijkstrasAlgorithm(graph)){
+        cout<< el << " ";
+    }
 
     return 0;
 }
