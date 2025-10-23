@@ -160,3 +160,32 @@ int main(){
 
     return 0;
 }
+
+// Reasoning through the Time and Space Complexity
+/*
+    There are Two Core things Happening in this implementation of the Dijkstra's Algorithm are:
+    1.Pick an unvisited node
+    2.Relax all its neigbhour
+
+    now,
+     => Picking a node:
+        - the cost of picking a node is simplly O(V), becasue we have loop through all the nodes to find minimum unvisited node
+            but this "picking" has to be done at every iteration O(V) * O(V) = O(V^2)
+     => Relaxing the negibour is simply visiting all the edges in the graph:
+        -   0->1 
+        -   1 -> 2, 1->3 , 1 -> 4
+        - 2->3
+        - 3->4
+        - 4-> X
+        - 5 -> X
+        so there are 6 edges so we only need to loop through relaxation loop these many times only
+        O(E) will be the time compleixty
+
+        so total time complexity = O(V^2 + E) = O(V^2) since V^2 is huge compare to E
+
+        hence time complexity O(V^2)
+
+        the space compleixity would be O(V+E) to store the graph
+
+
+*/
