@@ -48,7 +48,33 @@ void merge(vector<int>& array, vector<int>& auxillaryArray, int low, int mid, in
  
 }
 
+void mergeSort(vector<int>& src, vector<int>& dest, int low, int high){
+
+  if(high - low <=1 ){
+    dest[low] = src[low];
+    return;
+  }
+ int mid = low + (high-low)/2;
+  mergeSort(dest,src,low,mid);
+  mergeSort(dest,src,mid,high);
+  merge(src,dest,low,mid,high);
+  cout<< "low - "<< low << " mid - " << mid << " high - " << high << endl;
+  cout<< "src:  " <<&src <<"\t" <<src <<endl;
+  cout<< "dest: "<< &dest<<"\t"<< dest << endl;
+  cout<< "--------------------------------"<<endl;
+    
+}
+
 
 int main(){
-    return 0;
+
+  vector<int> array = {4,1,7,2,9,10,5,3};
+  vector<int> auxillaryArray(array.size());
+  auxillaryArray = array;
+  cout<< "A: "<< &array <<"\t" << "B: " << &auxillaryArray<<endl;
+  cout<<"--------------------------------------------------"<<endl;
+  mergeSort(array,auxillaryArray,0,array.size());
+  cout<<auxillaryArray<<endl;
+  return 0;
+  
 }
