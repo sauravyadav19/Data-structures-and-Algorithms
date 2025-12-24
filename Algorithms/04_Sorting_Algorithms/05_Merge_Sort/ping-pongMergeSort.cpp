@@ -55,7 +55,7 @@ void mergeSort(vector<int>& src, vector<int>& dest, int low, int high){
     return;
   }
  int mid = low + (high-low)/2;
-  mergeSort(dest,src,low,mid);
+  mergeSort(dest,src,low,mid); // this is where the buffer switches
   mergeSort(dest,src,mid,high);
   merge(src,dest,low,mid,high);
   cout<< "low - "<< low << " mid - " << mid << " high - " << high << endl;
