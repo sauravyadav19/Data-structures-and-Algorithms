@@ -36,7 +36,6 @@ class BinaryTree{
     private:
         Node<T>* root;
     public:
-        BinaryTree(Node<T>* rootNode):root(rootNode){}
         /* what and why data strcture used here are for
             1. Initializer List: we want to give the user a simple user interface so they do not have
                 care strcutring of the data; all they have to do is, specify data type of the binary tre
@@ -124,19 +123,39 @@ class BinaryTree{
                     
             }      
         }
+private: 
+        void cleanUpMemory(Node<T>* node){
+            if(node == nullptr){
+                return;
+            }
+            cleanUpMemory(node->left);
+            cleanUpMemory(node->right);
+            delete node;
+        }
+public:
+        ~BinaryTree(){
+            cleanUpMemory(this->root);
+            root = nullptr;
+        }  
         
-       const  Node<T>* getRoot(){
+       const  Node<T>* getRoot() const{
             return this->root;
         }
-        void printTreeHelper(const Node<T>*, int space = 0, int indent = 5);
-        void depthFirstOrder(const Node<T>*, vector<T>&);
-        void breadthFirstOrder(const Node<T>* ,vector<T>&);
+        void printTreeHelper(const Node<T>*, int space = 0, int indent = 5) const;
+        void printTree() const;
+        void depthFirstOrderHelper(const Node<T>*, vector<T>&) const;
+        vector<T> depthFirstOrder() const ;
+        void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
+        vector<T> breadthFirstOrder() const ;
+        BinaryTree(const BinaryTree&) = delete;
+        BinaryTree& operator=(const BinaryTree&) = delete;
+
 
 };
 
 // a method to print the tree for debugging purposes
 template <typename T>
-void BinaryTree<T>::printTreeHelper(const Node<T>* root, int space, int indent) {
+void BinaryTree<T>::printTreeHelper(const Node<T>* root, int space, int indent) const {
            
             if (root == nullptr){
                 return;
@@ -157,24 +176,38 @@ void BinaryTree<T>::printTreeHelper(const Node<T>* root, int space, int indent) 
 
             // Print left child
             printTreeHelper(root->left, space);
-        }
+}
+
+template <typename T>
+void BinaryTree<T>::printTree()const{
+    printTreeHelper(this->root);
+}
 
 
 // a method of the Binary tree class to return the depth first order of the nodes.
 template <typename T>
-void BinaryTree<T>::depthFirstOrder (const Node<T>* node, vector<T>& depthFirstOrderArray){
+void BinaryTree<T>::depthFirstOrderHelper(const Node<T>* node, vector<T>& depthFirstOrderArray) const {
     if(node == nullptr){
         return;
     }
     depthFirstOrderArray.push_back(node->value);
-    depthFirstOrder(node->left,depthFirstOrderArray);
-    depthFirstOrder(node->right,depthFirstOrderArray); 
+    depthFirstOrderHelper(node->left,depthFirstOrderArray);
+    depthFirstOrderHelper(node->right,depthFirstOrderArray); 
 }
+
+template <typename T>
+vector<T> BinaryTree<T>::depthFirstOrder() const {
+    vector<T> df;
+    depthFirstOrderHelper(this->root,df);
+    return df;
+ 
+}
+
 
 
 // a method of the binary tree class to return the breadth first order of the nodes.
 template <typename T>
-void BinaryTree<T>::breadthFirstOrder(const Node<T>* node, vector<T>& breadthFirstOrderArray){
+void BinaryTree<T>::breadthFirstOrderHelper(const Node<T>* node, vector<T>& breadthFirstOrderArray) const {
     if(node == nullptr){
         return;
     }
@@ -195,17 +228,22 @@ void BinaryTree<T>::breadthFirstOrder(const Node<T>* node, vector<T>& breadthFir
     
 }
 
+template <typename T>
+vector<T> BinaryTree<T>::breadthFirstOrder() const {
+    vector<T> bf;
+    breadthFirstOrderHelper(this->root,bf);
+    return bf;
+}
+
 int main(){
    BinaryTree<int> b = {1,2,5,3,4,6,7,8,nullopt,nullopt,11,nullopt,nullopt,nullopt,9};
    const Node<int>* root = b.getRoot();
 
-   b.printTreeHelper(root);
+   b.printTree();
    
-   vector<int> df;
-   b.depthFirstOrder(root,df);
+   vector<int> df = b.depthFirstOrder();
 
-   vector<int> bf;
-   b.breadthFirstOrder(root,bf);
+   vector<int> bf = b.breadthFirstOrder();
 
    cout<< "Depth first order: ";
    for(int&i: df){
