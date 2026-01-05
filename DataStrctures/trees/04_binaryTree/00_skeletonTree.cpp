@@ -35,6 +35,21 @@ template <typename T>
 class BinaryTree{
     private:
         Node<T>* root;
+
+        void cleanUpMemory(Node<T>* node){
+            if(node == nullptr){
+                return;
+            }
+            cleanUpMemory(node->left);
+            cleanUpMemory(node->right);
+            delete node;
+        }
+
+        void printTreeHelper(const Node<T>*, int space = 0, int indent = 5) const;
+        void depthFirstOrderHelper(const Node<T>*, vector<T>&) const;
+        void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
+
+
     public:
         /* what and why data strcture used here are for
             1. Initializer List: we want to give the user a simple user interface so they do not have
@@ -123,16 +138,7 @@ class BinaryTree{
                     
             }      
         }
-private: 
-        void cleanUpMemory(Node<T>* node){
-            if(node == nullptr){
-                return;
-            }
-            cleanUpMemory(node->left);
-            cleanUpMemory(node->right);
-            delete node;
-        }
-public:
+
         ~BinaryTree(){
             cleanUpMemory(this->root);
             root = nullptr;
@@ -141,11 +147,9 @@ public:
        const  Node<T>* getRoot() const{
             return this->root;
         }
-        void printTreeHelper(const Node<T>*, int space = 0, int indent = 5) const;
+        
         void printTree() const;
-        void depthFirstOrderHelper(const Node<T>*, vector<T>&) const;
         vector<T> depthFirstOrder() const ;
-        void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
         vector<T> breadthFirstOrder() const ;
         BinaryTree(const BinaryTree&) = delete;
         BinaryTree& operator=(const BinaryTree&) = delete;
