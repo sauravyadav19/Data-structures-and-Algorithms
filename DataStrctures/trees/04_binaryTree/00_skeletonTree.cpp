@@ -20,6 +20,7 @@
 #include<iostream>
 #include<queue>
 #include<optional>
+#include<vector>
 using namespace std;
 
 // Template is used to  make this program generic, so we can create binary tree of any datatype alike.
@@ -48,6 +49,8 @@ class BinaryTree{
         void printTreeHelper(const Node<T>*, int space = 0, int indent = 5) const;
         void depthFirstOrderHelper(const Node<T>*, vector<T>&) const;
         void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
+        void findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode);
+        Node<T>* findNode(const T&key);
 
 
     public:
@@ -153,6 +156,7 @@ class BinaryTree{
         vector<T> breadthFirstOrder() const ;
         BinaryTree(const BinaryTree&) = delete;
         BinaryTree& operator=(const BinaryTree&) = delete;
+        bool setValueIf( const T& oldValue,  const T& newValue);
 
 
 };
@@ -239,6 +243,61 @@ vector<T> BinaryTree<T>::breadthFirstOrder() const {
     return bf;
 }
 
+// a private method that traverses the tree in level order fashion and match the value of each node against a key
+// the first ocurrence of the key in the tree is returned, the address to be specific, even if there are multiple nodes of 
+// same value as the key. (so only the left most node is returned)
+template <typename T>
+void BinaryTree<T>::findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode){
+    if(node == nullptr){
+        return;
+    }
+    queue<Node<T>*> traversalQueue;
+    traversalQueue.push(node);
+   while(!traversalQueue.empty()){
+        Node<T>* currentNode = traversalQueue.front();
+        if(currentNode->value == key){
+            resultNode = currentNode;
+            return;
+        }
+        if(currentNode->left != nullptr){
+            traversalQueue.push(currentNode->left);
+        }
+        if(currentNode->right != nullptr){
+            traversalQueue.push(currentNode->right);
+        }
+        traversalQueue.pop();
+    }
+}
+
+// This private method is the manager of findNodeHelper(); it provides the key and when the value is returned (if any) sends 
+// appropriate response
+template <typename T>
+Node<T>* BinaryTree<T>::findNode(const T& key){
+    Node<T>* result = nullptr;
+    findNodeHelper(root,key,result);
+    if(result != nullptr){
+       return result;
+    }
+    else{
+        return nullptr;
+    }
+}
+
+// This is the public method for user to find a node with a value and replace it with a new one
+template <typename T>
+bool BinaryTree<T>::setValueIf(const T& oldValue ,  const T& newValue){
+
+    Node<T>* node = findNode(oldValue);
+
+    if(node != nullptr){
+        node->value = newValue;
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 int main(){
    BinaryTree<int> b = {1,2,5,3,4,6,7,8,nullopt,nullopt,11,nullopt,nullopt,nullopt,9};
    const Node<int>* root = b.getRoot();
@@ -260,5 +319,12 @@ int main(){
     cout<< i << " ";
    }
    cout<<endl;
+
+   int oldValue = 4;
+   int newValue = -400;
+   b.setValueIf(oldValue,newValue);
+   cout<< "---------updated tree---------"<<endl;
+   b.printTree();
+
     return 0;
 }
