@@ -19,6 +19,7 @@
 #include<iostream>
 #include<queue>
 #include<optional>
+#include<vector>
 using namespace std;
 
 template <typename T>
@@ -45,6 +46,8 @@ class BinaryTree{
         void printTreeHelper(const Node<T>*, int space = 0, int indent = 5) const;
         void depthFirstOrderHelper(const Node<T>*, vector<T>&) const;
         void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
+        void findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode);
+        Node<T>* findNode(const T&key);
 
 
     public:
@@ -97,6 +100,7 @@ class BinaryTree{
         vector<T> breadthFirstOrder() const ;
         BinaryTree(const BinaryTree&) = delete;
         BinaryTree& operator=(const BinaryTree&) = delete;
+        bool setValueIf( const T& oldValue,  const T& newValue);
 
 
 };
@@ -175,4 +179,53 @@ vector<T> BinaryTree<T>::breadthFirstOrder() const {
     vector<T> bf;
     breadthFirstOrderHelper(this->root,bf);
     return bf;
+}
+
+template <typename T>
+void BinaryTree<T>::findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode){
+    if(node == nullptr){
+        return;
+    }
+    queue<Node<T>*> traversalQueue;
+    traversalQueue.push(node);
+   while(!traversalQueue.empty()){
+        Node<T>* currentNode = traversalQueue.front();
+        if(currentNode->value == key){
+            resultNode = currentNode;
+            return;
+        }
+        if(currentNode->left != nullptr){
+            traversalQueue.push(currentNode->left);
+        }
+        if(currentNode->right != nullptr){
+            traversalQueue.push(currentNode->right);
+        }
+        traversalQueue.pop();
+    }
+}
+
+template <typename T>
+Node<T>* BinaryTree<T>::findNode(const T& key){
+    Node<T>* result = nullptr;
+    findNodeHelper(root,key,result);
+    if(result != nullptr){
+       return result;
+    }
+    else{
+        return nullptr;
+    }
+}
+
+template <typename T>
+bool BinaryTree<T>::setValueIf(const T& oldValue ,  const T& newValue){
+
+    Node<T>* node = findNode(oldValue);
+
+    if(node != nullptr){
+        node->value = newValue;
+        return true;
+    }
+    else{
+        return false;
+    }
 }
