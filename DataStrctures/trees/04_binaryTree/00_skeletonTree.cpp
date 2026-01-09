@@ -51,6 +51,7 @@ class BinaryTree{
         void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
         void findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode);
         Node<T>* findNode(const T&key);
+        void invertHelper(Node<T>* node);
 
 
     public:
@@ -157,6 +158,7 @@ class BinaryTree{
         BinaryTree(const BinaryTree&) = delete;
         BinaryTree& operator=(const BinaryTree&) = delete;
         bool setValueIf( const T& oldValue,  const T& newValue);
+        void invert();
 
 
 };
@@ -298,6 +300,25 @@ bool BinaryTree<T>::setValueIf(const T& oldValue ,  const T& newValue){
     }
 }
 
+// This is a private method that inverts the tree, that is if a node is in left it goes to the right side and vice versa of its
+// parent; this happens to all the nodes in the tree thus "inverting" it.
+template <typename T>
+void BinaryTree<T>::invertHelper(Node<T>* node){
+    if(node== nullptr){
+        return;
+    }
+    Node<T>* temp = node->left;
+    node->left = node->right;
+    node->right = temp;
+    invertHelper(node->left);
+    invertHelper(node->right);
+
+}
+// This is the public function expose to the user for inverting the tree
+template <typename T>
+void BinaryTree<T>:: invert(){
+    invertHelper(root);
+}
 int main(){
    BinaryTree<int> b = {1,2,5,3,4,6,7,8,nullopt,nullopt,11,nullopt,nullopt,nullopt,9};
    const Node<int>* root = b.getRoot();
@@ -323,6 +344,8 @@ int main(){
    int oldValue = 4;
    int newValue = -400;
    b.setValueIf(oldValue,newValue);
+
+   b.invert();
    cout<< "---------updated tree---------"<<endl;
    b.printTree();
 

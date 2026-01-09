@@ -48,6 +48,7 @@ class BinaryTree{
         void breadthFirstOrderHelper(const Node<T>* ,vector<T>&) const;
         void findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode);
         Node<T>* findNode(const T&key);
+        void invertHelper(Node<T>* node);
 
 
     public:
@@ -101,6 +102,7 @@ class BinaryTree{
         BinaryTree(const BinaryTree&) = delete;
         BinaryTree& operator=(const BinaryTree&) = delete;
         bool setValueIf( const T& oldValue,  const T& newValue);
+        void invert();
 
 
 };
@@ -228,4 +230,21 @@ bool BinaryTree<T>::setValueIf(const T& oldValue ,  const T& newValue){
     else{
         return false;
     }
+}
+
+template <typename T>
+void BinaryTree<T>::invertHelper(Node<T>* node){
+    if(node== nullptr){
+        return;
+    }
+    Node<T>* temp = node->left;
+    node->left = node->right;
+    node->right = temp;
+    invertHelper(node->left);
+    invertHelper(node->right);
+
+}
+template <typename T>
+void BinaryTree<T>:: invert(){
+    invertHelper(root);
 }
