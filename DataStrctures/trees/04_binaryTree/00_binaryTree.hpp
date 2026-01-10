@@ -49,6 +49,7 @@ class BinaryTree{
         void findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode);
         Node<T>* findNode(const T&key);
         void invertHelper(Node<T>* node);
+        void inOrderHelper(const Node<T>* node, vector<T>& inOrderArray);
 
 
     public:
@@ -103,6 +104,7 @@ class BinaryTree{
         BinaryTree& operator=(const BinaryTree&) = delete;
         bool setValueIf( const T& oldValue,  const T& newValue);
         void invert();
+        vector<T> inOrder();
 
 
 };
@@ -247,4 +249,21 @@ void BinaryTree<T>::invertHelper(Node<T>* node){
 template <typename T>
 void BinaryTree<T>:: invert(){
     invertHelper(root);
+}
+
+template <typename T>
+void BinaryTree<T>::inOrderHelper(const Node<T>* node, vector<T>& inOrderArray){
+    if(node == nullptr){
+        return;
+    }
+    inOrderHelper(node->left,inOrderArray);
+    inOrderArray.push_back(node->value);
+    inOrderHelper(node->right,inOrderArray);
+}
+
+template <typename T>
+vector<T> BinaryTree<T>::inOrder(){
+    vector<T> inOrderArray;
+    inOrderHelper(root,inOrderArray);
+    return inOrderArray;
 }

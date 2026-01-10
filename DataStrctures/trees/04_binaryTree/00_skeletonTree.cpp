@@ -52,6 +52,7 @@ class BinaryTree{
         void findNodeHelper(Node<T>* node, const T& key, Node<T>* &resultNode);
         Node<T>* findNode(const T&key);
         void invertHelper(Node<T>* node);
+        void inOrderHelper(const Node<T>* node, vector<T>& inOrderArray);
 
 
     public:
@@ -159,6 +160,7 @@ class BinaryTree{
         BinaryTree& operator=(const BinaryTree&) = delete;
         bool setValueIf( const T& oldValue,  const T& newValue);
         void invert();
+        vector<T> inOrder();
 
 
 };
@@ -319,6 +321,25 @@ template <typename T>
 void BinaryTree<T>:: invert(){
     invertHelper(root);
 }
+// This is a private helper method to find the in-order of the binary tree
+template <typename T>
+void BinaryTree<T>::inOrderHelper(const Node<T>* node, vector<T>& inOrderArray){
+    if(node == nullptr){
+        return;
+    }
+    inOrderHelper(node->left,inOrderArray);
+    inOrderArray.push_back(node->value);
+    inOrderHelper(node->right,inOrderArray);
+}
+
+// This is the public function for in-order traversal
+template <typename T>
+vector<T> BinaryTree<T>::inOrder(){
+    vector<T> inOrderArray;
+    inOrderHelper(root,inOrderArray);
+    return inOrderArray;
+}
+
 int main(){
    BinaryTree<int> b = {1,2,5,3,4,6,7,8,nullopt,nullopt,11,nullopt,nullopt,nullopt,9};
    const Node<int>* root = b.getRoot();
@@ -348,6 +369,14 @@ int main(){
    b.invert();
    cout<< "---------updated tree---------"<<endl;
    b.printTree();
+
+   cout<< "In Order traversal: ";
+   for(auto & i :b.inOrder()){
+        cout<< i << " ";
+   }
+   cout<<endl;
+
+
 
     return 0;
 }
