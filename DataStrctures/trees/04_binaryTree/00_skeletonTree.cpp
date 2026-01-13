@@ -30,7 +30,8 @@ struct Node{
     T value;
     Node* left;
     Node* right;
-    Node(const T &value):value(value), left(nullptr), right(nullptr){}
+    Node* parent;
+    Node(const T &value, Node* parent = nullptr):value(value), left(nullptr), right(nullptr),parent(parent){}
 };
 template <typename T>
 class BinaryTree{
@@ -98,7 +99,7 @@ class BinaryTree{
             }                         
            
             // Taking first value of the list as the root node
-            this->root = new Node<T> (list.begin()->value());  
+            this->root = new Node<T> (list.begin()->value(),nullptr);  
             queue<Node<T>*> insertingOrder;
             insertingOrder.push(root);
             // an iterator to traverse the intializer list 
@@ -125,7 +126,7 @@ class BinaryTree{
                 // Left side
                 if(listIterator != list.end()){
                     if(listIterator->has_value()){
-                        currentParentNode->left = new Node<T>(listIterator->value());
+                        currentParentNode->left = new Node<T>(listIterator->value(),currentParentNode);
                         insertingOrder.push(currentParentNode->left);
                     }
                     listIterator++;
@@ -135,7 +136,7 @@ class BinaryTree{
 
                 if(listIterator != list.end()){
                     if(listIterator->has_value()){
-                        currentParentNode->right = new Node<T>(listIterator->value());
+                        currentParentNode->right = new Node<T>(listIterator->value(),currentParentNode);
                         insertingOrder.push(currentParentNode->right);
                     }
                     listIterator++;

@@ -27,7 +27,8 @@ struct Node{
     T value;
     Node* left;
     Node* right;
-    Node(const T &value):value(value), left(nullptr), right(nullptr){}
+    Node* parent;
+    Node(const T &value, Node* parent = nullptr):value(value), left(nullptr), right(nullptr),parent(parent){}
 };
 template <typename T>
 class BinaryTree{
@@ -60,7 +61,7 @@ class BinaryTree{
                 return;
             }                         
            
-            this->root = new Node<T> (list.begin()->value());  
+            this->root = new Node<T> (list.begin()->value(),nullptr);   
             queue<Node<T>*> insertingOrder;
             insertingOrder.push(root);
 
@@ -72,14 +73,14 @@ class BinaryTree{
                 insertingOrder.pop();
                 if(listIterator != list.end()){
                     if(listIterator->has_value()){
-                        currentParentNode->left = new Node<T>(listIterator->value());
+                        currentParentNode->left = new Node<T>(listIterator->value(),currentParentNode);
                         insertingOrder.push(currentParentNode->left);
                     }
                     listIterator++;
                 }
                 if(listIterator != list.end()){
                     if(listIterator->has_value()){
-                        currentParentNode->right = new Node<T>(listIterator->value());
+                        currentParentNode->right = new Node<T>(listIterator->value(),currentParentNode);
                         insertingOrder.push(currentParentNode->right);
                     }
                     listIterator++;
