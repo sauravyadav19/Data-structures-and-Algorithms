@@ -5,17 +5,10 @@ using namespace std;
 
 
 class MinHeap{
-    public:
+    private:
         vector<int> heap;
-        MinHeap(initializer_list<int> list){
-            heap.reserve(list.size());
-            for(auto iterator = list.begin(); iterator < list.end(); iterator++){
-                heap.push_back(*iterator);
-            }
-            printHeap();
-            heapify();
-        }
-        void siftUp(int index){
+
+         void siftUp(int index){
 
             int parentNode = (index - 1)/2;
 
@@ -26,8 +19,8 @@ class MinHeap{
                 parentNode = (index - 1)/2;
             }
         } 
-        
-        void siftDown(int index){
+
+         void siftDown(int index){
             int leftChild = (2*index + 1);
             int rightChild = (2*index + 2);
 
@@ -60,6 +53,18 @@ class MinHeap{
             }
         }
       
+    public:
+        
+        MinHeap(){}
+        
+        MinHeap(initializer_list<int> list){
+            heap.reserve(list.size());
+            for(auto iterator = list.begin(); iterator < list.end(); iterator++){
+                heap.push_back(*iterator);
+            }
+            heapify();
+        }
+       
         void insert(int newValue){
             heap.push_back(newValue);
             siftUp(heap.size() - 1);
