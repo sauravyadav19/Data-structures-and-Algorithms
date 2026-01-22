@@ -3,43 +3,35 @@
 #include <initializer_list>
 using namespace std;
 
-
+template <typename T>
 class MinHeap{
     private:
-        vector<int> heap;
+        vector<T> heap;
 
-         void siftUp(int index){
-
-            int parentNode = (index - 1)/2;
-
+         void siftUp(size_t index){
+            size_t parentNode = (index - 1)/2;
             while(index > 0 && heap[parentNode] > heap[index]){
-
                 swap(heap[parentNode],heap[index]);
                 index = parentNode;
                 parentNode = (index - 1)/2;
             }
         } 
 
-         void siftDown(int index){
-            int leftChild = (2*index + 1);
-            int rightChild = (2*index + 2);
-
+         void siftDown(size_t index){
+            size_t leftChild = (2*index + 1);
+            size_t rightChild = (2*index + 2);
             if(leftChild >= heap.size()){
                 return;
             }
-            int swapWith = rightChild < heap.size() && heap[rightChild] < heap[leftChild]
+            size_t swapWith = rightChild < heap.size() && heap[rightChild] < heap[leftChild]
                             ? rightChild
                             : leftChild;
-
             while(leftChild < heap.size() &&  heap[index] > heap[swapWith]){
-
                     swap(heap[index], heap[swapWith]);
                     index = swapWith;
                     leftChild = (2*index + 1);
                     rightChild = (2*index + 2);
-
                     if(leftChild >= heap.size()) break;
-
                     swapWith = (rightChild < heap.size() && heap[rightChild] < heap[leftChild])
                                 ? rightChild
                                 : leftChild;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
@@ -48,7 +40,7 @@ class MinHeap{
         }
 
         void heapify(){
-            for(int node = (heap.size()/2 - 1); node >= 0; node--){
+            for(size_t node = heap.size()/2; node-- > 0;){
                 siftDown(node);
             }
         }
@@ -57,44 +49,64 @@ class MinHeap{
         
         MinHeap(){}
         
-        MinHeap(initializer_list<int> list){
+        MinHeap(initializer_list<T> list){
             heap.reserve(list.size());
             for(auto iterator = list.begin(); iterator < list.end(); iterator++){
                 heap.push_back(*iterator);
             }
             heapify();
         }
+        
        
-        void insert(int newValue){
+        void insert(T newValue){
             heap.push_back(newValue);
             siftUp(heap.size() - 1);
         }
-        void remove(){
-            swap(heap[0], heap[heap.size() - 1]);
-            heap.pop_back();
-            siftDown(0);
+
+
+        T removeRoot(){
+            if(!isEmpty()){
+                swap(heap[0], heap[heap.size() - 1]);
+                T removedElement = heap[heap.size() - 1];
+                heap.pop_back();
+                siftDown(0);
+                return removedElement;
+            }else{
+                throw runtime_error("Removal Failed: Heap is Empty");
+            }
         }
-        int peek(){
-            return heap[0];
+
+
+        T peek() const{
+            if(isEmpty()){
+                throw runtime_error("Peeking Failed: Heap is Empty");
+            }else{
+                return heap[0];
+            }
         }
-        void printHeap(){
-            cout<<endl;
-            for(auto & i : heap){
+
+
+        bool isEmpty () const{
+            return heap.empty();
+        }
+
+
+        void printHeap () const{
+            cout<< endl<< "{ ";
+            for(const T & i : heap){
                 cout<< i << " ";
             }
-            cout<<endl;
+            cout<< "}"<<endl;
         }
 };
 
 int main(){
 
-    MinHeap heap = {9, 4, 7, 1, 3, 6, 5};
+    MinHeap<int> heap =  {9,4,3,2,1,7,8,10,11,3,5,1,91,0};
     heap.printHeap();
-    heap.insert(0);
-    heap.printHeap();
-    heap.remove();
-    heap.printHeap();
+    cout<< "Removed Element "<< heap.removeRoot()<<endl;
     cout<< "peek: "<<heap.peek()<<endl;
+    heap.printHeap();
 
     return 0;
 }
