@@ -3,7 +3,7 @@
 #include <initializer_list>
 #include <algorithm>
 using namespace std;
-
+ostream& operator<<(ostream& ,vector<int>);
 template <typename T, typename Compare = std::less<T>>
 class Heap{
     private:
@@ -130,12 +130,39 @@ ostream& operator<<(ostream& stream, vector<int> vector){
     
 }
 
+size_t MinNumberOfLaptopReq(vector<vector<int>>& times){
+    sort(times.begin(), times.end(), [](vector<int> timeSlotA,vector<int> timeSlotB){
+        return timeSlotA[0] < timeSlotB[0];
+    });
+    struct CompareTimeSlots{
+        bool operator()(vector<int> timeSlotX,vector<int> TimeSlotY){
+            return timeSlotX[1] < TimeSlotY[1];
+        }
+    };
+    Heap<vector<int>, CompareTimeSlots> LaptopInUse;
+    for(int slot = 0; slot < times.size(); slot++){
+        if(LaptopInUse.isEmpty()){
+            LaptopInUse.insert(times[slot]);
+            continue;
+        }
+        if(LaptopInUse.peek()[1] > times[slot][0]){
+            LaptopInUse.insert(times[slot]);
+        }else{
+            LaptopInUse.removeRoot();
+            LaptopInUse.insert(times[slot]);
+        }
+
+    }
+    LaptopInUse.print();
+    return LaptopInUse.size();
+
+}
+
 int main(){
 
-    Heap<int> minheap = {9,1,3,5,6,8,3,7,2,8,53,9};
-    minheap.print();
-    Heap<int, greater<int>> maxHeap = {9,1,3,5,6,8,3,7,2,8,53,9};
-    maxHeap.print();
+    vector<vector<int>> times = {{0,2},{1,2},{4,6},{0,4},{7,8},{9,11},{3,10}};
+    int minLaptop = MinNumberOfLaptopReq(times);
+    cout<< "Minimum Laptop Required: "<< minLaptop<<endl;
     return 0;
 
 }
